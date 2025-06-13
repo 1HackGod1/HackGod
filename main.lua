@@ -1,4 +1,3 @@
-
 local rawUrl = "https://raw.githubusercontent.com/1HackGod1/HackGod/main/main.lua"
 local response = game:HttpGet(rawUrl)
 if not string.find(response, "HackGod") then
