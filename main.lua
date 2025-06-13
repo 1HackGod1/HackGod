@@ -1,5 +1,4 @@
 local HttpService = game:GetService("HttpService")
-
 local github_url = "https://raw.githubusercontent.com/1HackGod1/HackGod/main/main.lua"
 local github_code = game:HttpGet(github_url)
 
@@ -7,7 +6,6 @@ if not string.find(github_code, "HackGod") then
     error("Unauthorized execution detected.")
 end
 
-local expected_hash = 987654321
 local function simple_hash(str)
     local result = 0
     for i = 1, #str do
@@ -16,9 +14,7 @@ local function simple_hash(str)
     return result
 end
 
-if simple_hash(github_code) ~= expected_hash then
-    error("Tampering detected.")
-end
+local expected_hash = simple_hash(github_code)
 
 for i = 1, math.random(1000000, 2000000) do
     local dummy = i * i
