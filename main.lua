@@ -1,60 +1,55 @@
-local _a=game:GetService("HttpService")
-local _b="https://raw.githubusercontent.com/1HackGod1/HackGod/main/main.lua"
-local _c=game:HttpGet(_b)
-if not string.find(_c,"HackGod")then error("Unauthorized execution detected.")end
-local _d=123456789
-local function _e(_f)local _g=0;for _h=1,#_f do _g=(_g+string.byte(_f,_h)*_h)%1000000007 end;return _g end
-if _e(_c)~=_d then error("Tampering detected.")end
-for _i=1,math.random(1000000,2000000)do local _j=_i*_i end
-local function _k(_l)return _a:Base64Decode(_l)end
-local _m="여기에 base64로 한번 더 감싼 전체 base64 문자열"
-local _n=_k(_m)
-local _o=_k(_n)
-loadstring(_o)()
-
-local _p=false
-local _q=false
-local _r={}
-
-_j:AddToggle({
-    Title="Aim Bot",
-    Default=_p,
-    Callback=function(_s)
-        _p=_s
-        _a:Notify({
-            Title="Aim Bot",
-            Content=_p and "Aim Bot: ON ✅"or"Aim Bot: OFF ❌",
-            Duration=2
-        })
-    end
-})
-
-_j:AddToggle({
-    Title="ESP",
-    Default=_q,
-    Callback=function(_t)
-        _q=_t
-        _a:Notify({
-            Title="ESP",
-            Content=_q and "ESP: ON ✅"or"ESP: OFF ❌",
-            Duration=2
-        })
-        for _,v in pairs(_r)do pcall(function()v:Destroy()end)end
-        table.clear(_r)
-        if _q then
-            for _,plr in pairs(game:GetService("Players"):GetPlayers())do
-                if plr~=game:GetService("Players").LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")then
-                    local box=Instance.new("BoxHandleAdornment")
-                    box.Adornee=plr.Character.HumanoidRootPart
-                    box.Size=Vector3.new(2,3,1)
-                    box.Color3=Color3.fromRGB(255,127,39)
-                    box.Transparency=0.5
-                    box.AlwaysOnTop=true
-                    box.ZIndex=10
-                    box.Parent=game:GetService("CoreGui")
-                    table.insert(_r,box)
+local _a=loadstring(game:HttpGet((function()local _b={104,116,116,112,115,58,47,47,103,105,116,104,117,98,46,99,111,109,47,100,97,119,105,100,45,115,99,114,105,112,116,115,47,70,108,117,101,110,116,47,114,101,108,101,97,115,101,115,47,108,97,116,101,115,116,47,100,111,119,110,108,111,97,100,47,109,97,105,110,46,108,117,97} local _c={}for i=1,#_b do _c[i]=string.char(_b[i])end;return table.concat(_c)end)()))()
+local _d=_a:CreateWindow({Title="HackGod V.1.0.0",SubTitle="",TabWidth=160,Size=UDim2.fromOffset(580,460),Acrylic=false,Theme="Dark",MinimizeKey=Enum.KeyCode.LeftControl})
+local _e={(function()local _f={}local _g="Main"for i=1,#_g do table.insert(_f,string.sub(_g,i,i))end;return table.concat(_f)end)()}=_d:AddTab({Title="Main",Icon="home"})
+local _h=setmetatable({},{__index=function(_,k)return {[17625359962]=true}[k]end})
+local _i=false
+local _j=nil
+local _aimbotEnabled=false
+local _espEnabled=false
+local function toggleButton(state)return state and "On"or"Off"end
+_e["Main"]:AddButton({Title="Find Game",Callback=coroutine.wrap(function()
+    local _k=game.PlaceId
+    local _l=""
+    if pcall(function()return _h[_k]end)then
+        _l="Connection Successful! ✅"
+        if not _i then
+            _j=_d:AddTab({Title="Setting",Icon="settings"})
+            _i=true
+            _j:AddParagraph({Title="Setting Tab",Content=(function()local _m={}local _n="You have entered a rival game!"for i=1,#_n do table.insert(_m,string.sub(_n,i,i))end;return table.concat(_m)end)()})
+            _j:AddButton({Title="Aim Bot: Off",Callback=function(btn)
+                _aimbotEnabled=not _aimbotEnabled
+                btn:SetTitle("Aim Bot: "..toggleButton(_aimbotEnabled))
+            end})
+            _j:AddButton({Title="ESP: Off",Callback=function(btn)
+                _espEnabled=not _espEnabled
+                btn:SetTitle("ESP: "..toggleButton(_espEnabled))
+                for _,plr in pairs(game.Players:GetPlayers())do
+                    if plr~=game.Players.LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")then
+                        local part=plr.Character.HumanoidRootPart:FindFirstChild("ESPPart")
+                        if _espEnabled then
+                            if not part then
+                                part=Instance.new("BoxHandleAdornment",plr.Character.HumanoidRootPart)
+                                part.Name="ESPPart"
+                                part.Adornee=plr.Character.HumanoidRootPart
+                                part.AlwaysOnTop=true
+                                part.Size=Vector3.new(4,6,1)
+                                part.Color3=Color3.new(1,0.5,0)
+                                part.Transparency=0.5
+                            end
+                        else
+                            if part then part:Destroy()end
+                        end
+                    end
                 end
-            end
+            end})
         end
+    else
+        _l=(function()local _o={}local _p="Games Not Supported ❌"for i=1,#_p do table.insert(_o,string.sub(_p,i,i))end;return table.concat(_o)end)()
     end
-})
+    pcall(function()
+        _a:Notify({Title="Find Game",Content=_l,Duration=2})
+    end)
+end)})
+pcall(function()
+    _a:Notify({Title="HackGod V.1.0.0",Content=(function()local _q={}local _r="Loaded."for i=1,#_r do table.insert(_q,string.sub(_r,i,i))end;return table.concat(_q)end)(),Duration=3})
+end)
